@@ -20,7 +20,7 @@ import type { AppNotification } from '../../types';
 import { UserPlus, Info } from 'lucide-react';
 
 const CATEGORY_STYLES: Record<AppNotification['category'], { bg: string; icon: React.ReactNode }> = {
-  request: { bg: 'bg-indigo-50', icon: <UserPlus size={18} className="text-indigo-600" /> },
+  request: { bg: 'bg-primary/5', icon: <UserPlus size={18} className="text-primary" /> },
   message: { bg: 'bg-emerald-50', icon: <MessageSquare size={18} className="text-emerald-600" /> },
   session: { bg: 'bg-amber-50', icon: <Calendar size={18} className="text-amber-600" /> },
   system: { bg: 'bg-slate-50', icon: <Info size={18} className="text-slate-600" /> },
@@ -97,14 +97,14 @@ export default function Notifications() {
   }, {} as Record<string, AppNotification[]>);
 
   return (
-    <div className="min-h-screen bg-slate-50 lg:pl-64">
+    <div className="min-h-screen bg-surface lg:pl-64">
       <Sidebar role="student" />
       
       <main className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-10">
         <header className="mb-10">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div>
-              <div className="flex items-center gap-2 text-xs font-bold text-indigo-900 uppercase tracking-widest mb-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-widest mb-2">
                 <Bell size={14} />
                 Activity Center
               </div>
@@ -133,7 +133,7 @@ export default function Notifications() {
                   className={`
                     whitespace-nowrap rounded-xl px-4 py-2 text-xs font-bold transition-all
                     ${activeFilter === filter.id 
-                      ? 'bg-indigo-900 text-white shadow-lg shadow-indigo-900/20' 
+                      ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                       : 'bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50'}
                   `}
                 >
@@ -148,7 +148,7 @@ export default function Notifications() {
                 placeholder="Search notifications..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-xl border-slate-200 bg-white py-2.5 pr-4 pl-11 text-sm focus:border-indigo-900 focus:ring-indigo-900"
+                className="w-full rounded-xl border-slate-200 bg-white py-2.5 pr-4 pl-11 text-sm focus:border-primary focus:ring-primary"
               />
             </div>
           </div>
@@ -175,8 +175,8 @@ export default function Notifications() {
                         exit={{ opacity: 0, scale: 0.95 }}
                         onClick={() => !notif.read && handleMarkOne(notif.id)}
                         className={`
-                          cursor-pointer group relative flex items-start gap-5 rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all hover:shadow-xl hover:shadow-indigo-900/5 hover:ring-indigo-100
-                          ${!notif.read ? 'bg-gradient-to-r from-white to-indigo-50/30' : ''}
+                          cursor-pointer group relative flex items-start gap-5 rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all hover:shadow-xl hover:shadow-primary/5 hover:ring-primary/20
+                          ${!notif.read ? 'bg-gradient-to-r from-white to-primary/5' : ''}
                         `}
                       >
                         <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl shadow-inner ${style.bg}`}>
@@ -189,7 +189,7 @@ export default function Notifications() {
                                 {notif.title}
                               </h3>
                               {!notif.read && (
-                                <span className="h-2 w-2 rounded-full bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.6)]"></span>
+                                <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_8px_rgba(1,133,66,0.6)]"></span>
                               )}
                             </div>
                             <div className="flex items-center gap-2 text-[10px] font-medium text-slate-400">
@@ -201,7 +201,7 @@ export default function Notifications() {
                             {notif.body}
                           </p>
                           <div className="mt-5 flex items-center gap-4">
-                            <button className="rounded-xl bg-indigo-900 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-indigo-900/10 transition-all hover:bg-indigo-800">
+                            <button className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white shadow-lg shadow-primary/10 transition-all hover:bg-primary-dark">
                               View Details
                             </button>
                             <button className="rounded-xl px-4 py-2 text-xs font-bold text-slate-400 transition-all hover:bg-slate-50 hover:text-slate-600">
@@ -228,8 +228,8 @@ export default function Notifications() {
         {filteredNotifications.length === 0 && (
           <div className="mt-20 flex flex-col items-center text-center">
             <div className="relative mb-6">
-              <div className="absolute inset-0 animate-ping rounded-full bg-indigo-100 opacity-75"></div>
-              <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-indigo-50 text-indigo-400">
+              <div className="absolute inset-0 animate-ping rounded-full bg-primary/10 opacity-75"></div>
+              <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-primary/5 text-primary/40">
                 <Bell size={48} />
               </div>
             </div>
@@ -240,7 +240,7 @@ export default function Notifications() {
             {searchQuery && (
               <button 
                 onClick={() => setSearchQuery('')}
-                className="mt-6 text-sm font-bold text-indigo-900 hover:underline"
+                className="mt-6 text-sm font-bold text-primary hover:underline"
               >
                 Clear search
               </button>

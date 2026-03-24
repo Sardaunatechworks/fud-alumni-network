@@ -10,7 +10,7 @@ export default function PendingApproval() {
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-lg text-center"
       >
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-indigo-50 text-indigo-900 shadow-inner">
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 text-primary shadow-inner">
           <Clock size={40} className="animate-pulse" />
         </div>
         
@@ -32,7 +32,7 @@ export default function PendingApproval() {
             </div>
             
             <div className="flex gap-4">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Mail size={18} />
               </div>
               <div>
@@ -50,7 +50,7 @@ export default function PendingApproval() {
         </div>
 
         <div className="mt-10">
-          <Link to="/" className="inline-flex items-center gap-2 font-bold text-indigo-900 hover:text-indigo-800">
+          <Link to="/" className="inline-flex items-center gap-2 font-bold text-primary hover:text-primary-dark">
             <ArrowLeft size={18} /> Return to Home
           </Link>
         </div>

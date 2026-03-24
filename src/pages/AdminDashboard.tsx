@@ -35,6 +35,7 @@ import {
   getReports,
 } from '../lib/db';
 import { signOut } from '../lib/db';
+import { useAuth } from '../lib/authContext';
 import {
   BarChart,
   Bar,
@@ -218,6 +219,7 @@ export default function AdminDashboard() {
     u.role.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const { profile: user } = useAuth();
   const generateChartData = (allUsers: User[]) => {
     const data = [];
     const today = new Date();
@@ -247,7 +249,7 @@ export default function AdminDashboard() {
   const newSessionsThisWeek = sessions.filter(s => new Date(s.date) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length;
 
   return (
-    <div className="min-h-screen bg-slate-50 lg:pl-64">
+    <div className="min-h-screen bg-surface lg:pl-64">
       <Sidebar role="admin" />
 
       <main className="p-4 sm:p-6 lg:p-8">
@@ -258,14 +260,14 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-slate-200">
-              <Shield size={20} className="text-indigo-900" />
+              <Shield size={20} className="text-primary" />
             </div>
             <div className="relative">
               <button
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="h-10 w-10 overflow-hidden rounded-full ring-2 ring-indigo-900 transition-transform hover:scale-105 active:scale-95"
+                className="h-10 w-10 overflow-hidden rounded-full ring-2 ring-primary transition-transform hover:scale-105 active:scale-95"
               >
-                <img src="https://picsum.photos/seed/admin/100/100" alt="Admin" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                <img src={user?.avatarUrl || "https://picsum.photos/seed/admin/100/100"} alt="Admin" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
               </button>
 
               <AnimatePresence>
@@ -285,7 +287,7 @@ export default function AdminDashboard() {
                       <div className="h-px bg-slate-100 my-1" />
                       <button
                         onClick={() => handleTabChange('settings')}
-                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-indigo-900"
+                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-primary"
                       >
                         <Settings size={16} /> Settings
                       </button>
@@ -318,7 +320,7 @@ export default function AdminDashboard() {
               onClick={() => handleTabChange(tab.id as Tab)}
               className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-all ${
                 activeTab === tab.id
-                  ? 'border-indigo-900 text-indigo-900'
+                  ? 'border-primary text-primary'
                   : 'border-transparent text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -336,7 +338,7 @@ export default function AdminDashboard() {
         {/* Loading state */}
         {loading && (
           <div className="flex items-center justify-center py-20">
-            <Loader2 size={32} className="animate-spin text-indigo-900" />
+            <Loader2 size={32} className="animate-spin text-primary" />
           </div>
         )}
 
@@ -348,7 +350,7 @@ export default function AdminDashboard() {
               <>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
                   {[
-                    { label: 'Total Users', value: users.length, icon: <Users size={20} />, color: 'text-indigo-600', bg: 'bg-indigo-50', trend: `+${newUsersThisWeek} this week`, up: newUsersThisWeek >= 0 },
+                    { label: 'Total Users', value: users.length, icon: <Users size={20} />, color: 'text-primary', bg: 'bg-primary/10', trend: `+${newUsersThisWeek} this week`, up: newUsersThisWeek >= 0 },
                     { label: 'Pending Approvals', value: pendingAlumni.length, icon: <Clock size={20} />, color: 'text-amber-600', bg: 'bg-amber-50', trend: 'Needs Action', up: false },
                     { label: 'Total Sessions', value: sessions.length, icon: <Activity size={20} />, color: 'text-emerald-600', bg: 'bg-emerald-50', trend: `+${newSessionsThisWeek} this week`, up: newSessionsThisWeek >= 0 },
                     { label: 'Reported Issues', value: reports.length, icon: <AlertTriangle size={20} />, color: 'text-red-600', bg: 'bg-red-50', trend: reports.length > 0 ? 'Requires attention' : 'All clear', up: reports.length === 0 },
@@ -383,15 +385,15 @@ export default function AdminDashboard() {
                         <AreaChart data={chartData}>
                           <defs>
                             <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#312e81" stopOpacity={0.1} />
-                              <stop offset="95%" stopColor="#312e81" stopOpacity={0} />
+                              <stop offset="5%" stopColor="#018542" stopOpacity={0.1} />
+                              <stop offset="95%" stopColor="#018542" stopOpacity={0} />
                             </linearGradient>
                           </defs>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                           <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
                           <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
                           <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                          <Area type="monotone" dataKey="users" stroke="#312e81" fillOpacity={1} fill="url(#colorUsers)" strokeWidth={3} />
+                          <Area type="monotone" dataKey="users" stroke="#018542" fillOpacity={1} fill="url(#colorUsers)" strokeWidth={3} />
                         </AreaChart>
                       </ResponsiveContainer>
                     </div>
@@ -409,16 +411,16 @@ export default function AdminDashboard() {
                           <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
                           <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
                           <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                          <Bar dataKey="count" fill="#312e81" radius={[8, 8, 0, 0]} />
+                          <Bar dataKey="count" fill="#018542" radius={[8, 8, 0, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
-                    <div className="mt-4 rounded-2xl bg-indigo-50 p-4">
+                    <div className="mt-4 rounded-2xl bg-primary/5 p-4">
                       <div className="flex items-center gap-3">
-                        <TrendingUp className="text-indigo-600" size={20} />
-                        <p className="text-sm font-bold text-indigo-900">Platform Insight</p>
+                        <TrendingUp className="text-primary" size={20} />
+                        <p className="text-sm font-bold text-primary">Platform Insight</p>
                       </div>
-                      <p className="mt-2 text-xs text-indigo-700 leading-relaxed">
+                      <p className="mt-2 text-xs text-primary/70 leading-relaxed">
                         {alumni.length} alumni mentors serving {students.length} students on the platform.
                       </p>
                     </div>
@@ -471,7 +473,7 @@ export default function AdminDashboard() {
                               <p className="text-xs text-slate-500">{alumnus.department}</p>
                             </td>
                             <td className="py-4">
-                              <span className="rounded-full bg-indigo-50 px-2 py-1 text-[10px] font-bold text-indigo-700">
+                              <span className="rounded-full bg-primary/10 px-2 py-1 text-[10px] font-bold text-primary">
                                 {alumnus.expertise || '—'}
                               </span>
                             </td>
@@ -516,12 +518,12 @@ export default function AdminDashboard() {
                         placeholder="Search users..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="rounded-xl border-slate-200 bg-slate-50 pl-10 pr-4 py-2 text-sm focus:border-indigo-900 focus:ring-indigo-900"
+                        className="rounded-xl border-slate-200 bg-slate-50 pl-10 pr-4 py-2 text-sm focus:border-primary focus:ring-primary"
                       />
                     </div>
                     <button
                       onClick={() => setShowAddUserModal(true)}
-                      className="flex items-center gap-2 rounded-xl bg-indigo-900 px-4 py-2 text-sm font-bold text-white hover:bg-indigo-800"
+                      className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary-dark"
                     >
                       <UserPlus size={16} /> Add Alumni
                     </button>
@@ -587,7 +589,7 @@ export default function AdminDashboard() {
                               </button>
                               <button
                                 onClick={() => setEditingUser(u)}
-                                className="p-2 text-slate-400 hover:text-indigo-900"
+                                className="p-2 text-slate-400 hover:text-primary"
                                 title="Edit"
                               >
                                 <MoreVertical size={16} />
@@ -713,7 +715,7 @@ export default function AdminDashboard() {
                           <div className="flex gap-2">
                             <button
                               onClick={() => setReviewingReport(report)}
-                              className="rounded-lg bg-indigo-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-indigo-800"
+                              className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-white hover:bg-primary-dark"
                             >
                               Review
                             </button>
@@ -772,7 +774,7 @@ export default function AdminDashboard() {
                           </div>
                           <button
                             onClick={() => toggleConfig(key)}
-                            className={`h-6 w-11 rounded-full p-1 transition-all ${config[key] ? 'bg-indigo-900' : 'bg-slate-200'}`}
+                            className={`h-6 w-11 rounded-full p-1 transition-all ${config[key] ? 'bg-primary' : 'bg-slate-200'}`}
                           >
                             <div className={`h-4 w-4 rounded-full bg-white shadow-sm transition-all ${config[key] ? 'translate-x-5' : 'translate-x-0'}`} />
                           </button>
@@ -791,11 +793,12 @@ export default function AdminDashboard() {
       <AnimatePresence>
         {notification && (
           <motion.div
+            key="notification"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             className={`fixed bottom-8 right-8 z-[100] flex items-center gap-3 rounded-2xl px-6 py-4 shadow-2xl ${
-              notification.type === 'success' ? 'bg-indigo-900 text-white' : 'bg-red-600 text-white'
+              notification.type === 'success' ? 'bg-primary text-white' : 'bg-red-600 text-white'
             }`}
           >
             {notification.type === 'success' ? <CheckCircle size={20} /> : <AlertTriangle size={20} />}
@@ -807,7 +810,7 @@ export default function AdminDashboard() {
       {/* ── REVIEW REPORT MODAL ───────────────────────────────────────────────── */}
       <AnimatePresence>
         {reviewingReport && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" key="review-modal">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -874,7 +877,7 @@ export default function AdminDashboard() {
       {/* ── VIEW USER MODAL ───────────────────────────────────────────────────── */}
       <AnimatePresence>
         {viewingUser && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" key="view-modal">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -889,7 +892,7 @@ export default function AdminDashboard() {
               className="relative w-full max-w-lg rounded-3xl bg-white p-8 shadow-2xl"
             >
               <div className="mb-6 flex items-center gap-4">
-                <div className="h-16 w-16 overflow-hidden rounded-2xl bg-slate-100 ring-4 ring-indigo-50">
+                <div className="h-16 w-16 overflow-hidden rounded-2xl bg-slate-100 ring-4 ring-primary/10">
                   <img src={`https://picsum.photos/seed/${viewingUser.id}/150/150`} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div>
@@ -931,7 +934,7 @@ export default function AdminDashboard() {
                         <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Interests</p>
                         <div className="mt-2 flex flex-wrap gap-2">
                           {viewingUser.interests.map(i => (
-                            <span key={i} className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-bold text-indigo-700">{i}</span>
+                            <span key={i} className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">{i}</span>
                           ))}
                         </div>
                       </div>
@@ -961,7 +964,7 @@ export default function AdminDashboard() {
               <div className="mt-8">
                 <button
                   onClick={() => setViewingUser(null)}
-                  className="w-full rounded-xl bg-slate-900 py-3 text-sm font-bold text-white hover:bg-slate-800 shadow-lg"
+                  className="w-full rounded-xl bg-primary py-3 text-sm font-bold text-white hover:bg-primary-dark shadow-lg"
                 >
                   Close Profile
                 </button>
@@ -974,7 +977,7 @@ export default function AdminDashboard() {
       {/* ── EDIT USER MODAL ───────────────────────────────────────────────────── */}
       <AnimatePresence>
         {editingUser && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" key="edit-modal">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -999,7 +1002,7 @@ export default function AdminDashboard() {
                       required
                       value={editingUser.fullName}
                       onChange={(e) => setEditingUser({ ...editingUser, fullName: e.target.value })}
-                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm"
+                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm focus:border-primary focus:ring-primary"
                     />
                   </div>
                   <div>
@@ -1007,7 +1010,7 @@ export default function AdminDashboard() {
                     <select
                       value={editingUser.status}
                       onChange={(e) => setEditingUser({ ...editingUser, status: e.target.value as User['status'] })}
-                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm"
+                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm focus:border-primary focus:ring-primary"
                     >
                       <option value="active">Active</option>
                       <option value="pending">Pending</option>
@@ -1020,7 +1023,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={editingUser.department ?? ''}
                       onChange={(e) => setEditingUser({ ...editingUser, department: e.target.value })}
-                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm"
+                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm focus:border-primary focus:ring-primary"
                     />
                   </div>
                 </div>
@@ -1034,7 +1037,7 @@ export default function AdminDashboard() {
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 rounded-xl bg-indigo-900 py-3 text-sm font-bold text-white hover:bg-indigo-800 shadow-lg"
+                    className="flex-1 rounded-xl bg-primary py-3 text-sm font-bold text-white hover:bg-primary-dark shadow-lg"
                   >
                     Save Changes
                   </button>
@@ -1048,7 +1051,7 @@ export default function AdminDashboard() {
       {/* ── ADD ALUMNI MODAL ──────────────────────────────────────────────────── */}
       <AnimatePresence>
         {showAddUserModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" key="add-modal">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -1073,7 +1076,7 @@ export default function AdminDashboard() {
                       required
                       value={newAlumni.fullName}
                       onChange={(e) => setNewAlumni({ ...newAlumni, fullName: e.target.value })}
-                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm"
+                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm focus:border-primary focus:ring-primary"
                     />
                   </div>
                   <div>
@@ -1083,7 +1086,7 @@ export default function AdminDashboard() {
                       required
                       value={newAlumni.email}
                       onChange={(e) => setNewAlumni({ ...newAlumni, email: e.target.value })}
-                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm"
+                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm focus:border-primary focus:ring-primary"
                     />
                   </div>
                   <div>
@@ -1094,7 +1097,7 @@ export default function AdminDashboard() {
                       minLength={6}
                       value={newAlumni.password}
                       onChange={(e) => setNewAlumni({ ...newAlumni, password: e.target.value })}
-                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm"
+                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm focus:border-primary focus:ring-primary"
                       placeholder="Min 6 characters"
                     />
                   </div>
@@ -1104,7 +1107,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={newAlumni.graduationYear}
                       onChange={(e) => setNewAlumni({ ...newAlumni, graduationYear: e.target.value })}
-                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm"
+                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm focus:border-primary focus:ring-primary"
                       placeholder="e.g. 2018"
                     />
                   </div>
@@ -1114,7 +1117,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={newAlumni.department}
                       onChange={(e) => setNewAlumni({ ...newAlumni, department: e.target.value })}
-                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm"
+                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm focus:border-primary focus:ring-primary"
                     />
                   </div>
                   <div className="col-span-2">
@@ -1123,7 +1126,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={newAlumni.expertise}
                       onChange={(e) => setNewAlumni({ ...newAlumni, expertise: e.target.value })}
-                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm"
+                      className="mt-1 w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-2 text-sm focus:border-primary focus:ring-primary"
                       placeholder="e.g. Software Engineering"
                     />
                   </div>
@@ -1139,7 +1142,7 @@ export default function AdminDashboard() {
                   <button
                     type="submit"
                     disabled={addLoading}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-900 py-3 text-sm font-bold text-white hover:bg-indigo-800 shadow-lg disabled:opacity-60"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-white hover:bg-primary-dark shadow-lg disabled:opacity-60"
                   >
                     {addLoading && <Loader2 size={16} className="animate-spin" />}
                     {addLoading ? 'Creating…' : 'Create Alumnus'}

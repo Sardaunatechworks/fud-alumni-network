@@ -25,6 +25,7 @@ function mapProfile(row: any): User {
         bio: row.bio ?? undefined,
         level: row.level ?? undefined,
         interests: row.interests ?? undefined,
+        avatarUrl: row.avatar_url ?? undefined,
         password: '', // never stored client-side
         createdAt: row.created_at ?? undefined,
     };
@@ -44,6 +45,8 @@ function mapRequest(row: any, studentProfile?: any, alumniProfile?: any): Mentor
         reason: row.reason ?? '',
         date: row.created_at ?? new Date().toISOString(),
         status: row.status,
+        studentAvatarUrl: studentProfile?.avatar_url ?? undefined,
+        alumniAvatarUrl: alumniProfile?.avatar_url ?? undefined,
     };
 }
 
@@ -150,6 +153,7 @@ export async function updateProfile(userId: string, updates: Partial<Omit<User, 
     if (updates.bio !== undefined) dbUpdates.bio = updates.bio;
     if (updates.level !== undefined) dbUpdates.level = updates.level;
     if (updates.interests !== undefined) dbUpdates.interests = updates.interests;
+    if (updates.avatarUrl !== undefined) dbUpdates.avatar_url = updates.avatarUrl;
 
     const { error } = await supabase.from('profiles').update(dbUpdates).eq('id', userId);
     if (error) console.error('updateProfile error:', error);
@@ -163,6 +167,24 @@ export async function deleteUser(userId: string): Promise<void> {
     // Deleting the profile cascades; the auth user row requires admin/service role
     const { error } = await supabase.from('profiles').delete().eq('id', userId);
     if (error) console.error('deleteUser error:', error);
+}
+
+export async function uploadAvatar(file: File, userId: string): Promise<string | null> {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const filePath = `${userId}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file);
+
+    if (uploadError) {
+        console.error('Error uploading avatar:', uploadError);
+        return null;
+    }
+
+    const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+    return data.publicUrl;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -230,7 +252,7 @@ export async function updateRequestStatus(
 export async function getChatsForUser(userId: string): Promise<Chat[]> {
     const { data, error } = await supabase
         .from('chats')
-        .select('*, student:profiles!student_id(full_name), alumni:profiles!alumni_id(full_name)')
+        .select('*, student:profiles!student_id(full_name, avatar_url), alumni:profiles!alumni_id(full_name, avatar_url)')
         .or(`student_id.eq.${userId},alumni_id.eq.${userId}`)
         .order('created_at', { ascending: false });
     if (error) { console.error(error); return []; }
@@ -245,6 +267,8 @@ export async function getChatsForUser(userId: string): Promise<Chat[]> {
         lastTime: row.last_time ?? '',
         unreadByStudent: row.unread_by_student ?? 0,
         unreadByAlumni: row.unread_by_alumni ?? 0,
+        studentAvatarUrl: row.student?.avatar_url ?? undefined,
+        alumniAvatarUrl: row.alumni?.avatar_url ?? undefined,
     }));
 }
 
@@ -257,7 +281,7 @@ export async function getOrCreateChat(
     const chatId = `${studentId}_${alumniId}`;
     const { data: existing } = await supabase
         .from('chats')
-        .select('*')
+        .select('*, student:profiles!student_id(avatar_url), alumni:profiles!alumni_id(avatar_url)')
         .eq('id', chatId)
         .maybeSingle();
 
@@ -273,13 +297,15 @@ export async function getOrCreateChat(
             lastTime: existing.last_time ?? '',
             unreadByStudent: existing.unread_by_student ?? 0,
             unreadByAlumni: existing.unread_by_alumni ?? 0,
+            studentAvatarUrl: existing.student?.avatar_url ?? undefined,
+            alumniAvatarUrl: existing.alumni?.avatar_url ?? undefined,
         };
     }
 
     const { data: created, error } = await supabase
         .from('chats')
         .insert({ id: chatId, student_id: studentId, alumni_id: alumniId })
-        .select()
+        .select('*, student:profiles!student_id(avatar_url), alumni:profiles!alumni_id(avatar_url)')
         .single();
 
     if (error) throw new Error(error.message);
@@ -294,6 +320,8 @@ export async function getOrCreateChat(
         lastTime: '',
         unreadByStudent: 0,
         unreadByAlumni: 0,
+        studentAvatarUrl: created.student?.avatar_url ?? undefined,
+        alumniAvatarUrl: created.alumni?.avatar_url ?? undefined,
     };
 }
 
@@ -323,11 +351,35 @@ export async function sendMessage(
         .single();
     if (error) { console.error(error); return null; }
 
-    // Update last message preview on the chat row
+    // Update last message preview and increment unread count
+    const unreadField = sender === 'student' ? 'unread_by_alumni' : 'unread_by_student';
+    
+    // Note: We're using a simple increment here. For high-precision production we'd use an RPC,
+    // but this works for our current scale.
+    const { data: currentChat } = await supabase.from('chats').select(`student_id, alumni_id, ${unreadField}`).eq('id', chatId).single();
+    const newCount = (currentChat?.[unreadField as keyof typeof currentChat] || 0) + 1;
+
     await supabase
         .from('chats')
-        .update({ last_message: text, last_time: timeStr })
+        .update({ 
+            last_message: text, 
+            last_time: timeStr,
+            [unreadField]: newCount 
+        })
         .eq('id', chatId);
+
+    // Add notification for the recipient
+    const recipientId = sender === 'student' ? currentChat?.alumni_id : currentChat?.student_id;
+    if (recipientId) {
+        await addNotification({
+            userId: recipientId,
+            category: 'message',
+            title: 'New Message',
+            body: text.length > 50 ? text.substring(0, 47) + '...' : text,
+            read: false,
+            relatedId: chatId,
+        });
+    }
 
     return mapMessage(data);
 }

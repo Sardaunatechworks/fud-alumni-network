@@ -58,6 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         bio: data.bio ?? undefined,
         level: data.level ?? undefined,
         interests: data.interests ?? undefined,
+        avatarUrl: data.avatar_url ?? undefined,
         // password is not stored on the client — Supabase Auth handles it
         password: '',
       });

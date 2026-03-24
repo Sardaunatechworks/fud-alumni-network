@@ -160,7 +160,7 @@ create policy "chats: participants" on public.chats for all using (
 create policy "messages: participants" on public.messages for all using (
   exists (
     select 1 from public.chats c
-    where c.id = chat_id and (auth.uid() = c.student_id or auth.uid() = c.alumni_id)
+    where c.id = public.messages.chat_id and (auth.uid() = c.student_id or auth.uid() = c.alumni_id)
   ) or
   exists (select 1 from public.profiles where id = auth.uid() and role = 'admin')
 );
@@ -190,3 +190,39 @@ create policy "admin_config: admin" on public.admin_config for all using (
 -- ============================================================
 alter publication supabase_realtime add table public.messages;
 alter publication supabase_realtime add table public.notifications;
+
+-- ============================================================
+-- STORAGE: avatars bucket
+-- Note: Run these individually if your Supabase version requires
+-- ============================================================
+
+-- Create the bucket
+insert into storage.buckets (id, name, public) 
+values ('avatars', 'avatars', true)
+on conflict (id) do nothing;
+
+-- Set up access policies for the avatars bucket
+create policy "Avatar images are publicly accessible."
+  on storage.objects for select
+  using ( bucket_id = 'avatars' );
+
+create policy "Users can upload their own avatar."
+  on storage.objects for insert
+  with check (
+    bucket_id = 'avatars' AND
+    (auth.uid())::text = (storage.foldername(name))[1]
+  );
+
+create policy "Users can update their own avatar."
+  on storage.objects for update
+  using (
+    bucket_id = 'avatars' AND
+    (auth.uid())::text = (storage.foldername(name))[1]
+  );
+
+create policy "Users can delete their own avatar."
+  on storage.objects for delete
+  using (
+    bucket_id = 'avatars' AND
+    (auth.uid())::text = (storage.foldername(name))[1]
+  );

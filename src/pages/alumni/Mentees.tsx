@@ -1,9 +1,10 @@
 import Sidebar from '../../components/Sidebar';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Search, Filter, MessageSquare, UserCheck, UserX, MoreVertical, GraduationCap, Calendar } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../lib/authContext';
-import { getMentorshipRequestsForAlumni, updateRequestStatus, addNotification } from '../../lib/db';
+import { getMentorshipRequestsForAlumni, updateRequestStatus, addNotification, getOrCreateChat } from '../../lib/db';
 import type { MentorshipRequest } from '../../types';
 
 export default function Mentees() {
@@ -11,6 +12,7 @@ export default function Mentees() {
   const [searchQuery, setSearchQuery] = useState('');
   const [mentees, setMentees] = useState<MentorshipRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchMentees = async () => {
     if (!user) return;
@@ -27,6 +29,9 @@ export default function Mentees() {
 
   const handleAccept = async (req: MentorshipRequest) => {
     await updateRequestStatus(req.id, 'accepted');
+    // Ensure chat exists
+    await getOrCreateChat(req.studentId, req.studentName, user.id, user.fullName);
+    
     await addNotification({
       userId: req.studentId,
       category: 'request',
@@ -51,13 +56,28 @@ export default function Mentees() {
     fetchMentees();
   };
 
+  const handleChat = async (mentee: MentorshipRequest) => {
+    if (!user) return;
+    try {
+      const chat = await getOrCreateChat(
+        mentee.studentId,
+        mentee.studentName,
+        user.id,
+        user.fullName
+      );
+      navigate(`/dashboard/alumni/chat?chat=${chat.id}`);
+    } catch (error) {
+      console.error('Error starting chat:', error);
+    }
+  };
+
   const filteredMentees = mentees.filter(m => 
     m.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     m.studentDept.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 lg:pl-64">
+    <div className="min-h-screen bg-surface lg:pl-64">
       <Sidebar role="alumni" />
       
       <main className="p-4 sm:p-6 lg:p-8">
@@ -75,7 +95,7 @@ export default function Mentees() {
               placeholder="Search mentees by name or department..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-2xl border-slate-200 bg-white py-4 pr-4 pl-12 text-slate-900 shadow-sm transition-all focus:border-indigo-900 focus:ring-indigo-900"
+              className="w-full rounded-2xl border-slate-200 bg-white py-4 pr-4 pl-12 text-slate-900 shadow-sm transition-all focus:border-primary focus:ring-primary"
             />
           </div>
           <button className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm font-bold text-slate-700 shadow-sm hover:bg-slate-50">
@@ -86,7 +106,7 @@ export default function Mentees() {
         {/* Mentees List */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-900 border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
             <p className="mt-4 text-sm font-bold text-slate-500">Loading mentees...</p>
           </div>
         ) : filteredMentees.length === 0 ? (
@@ -111,7 +131,7 @@ export default function Mentees() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
                     <div className="h-16 w-16 overflow-hidden rounded-2xl ring-4 ring-slate-50">
-                      <img src={`https://picsum.photos/seed/${mentee.studentId}/100/100`} alt={mentee.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                      <img src={mentee.studentAvatarUrl || `https://picsum.photos/seed/${mentee.studentId}/100/100`} alt={mentee.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                     </div>
                     <div>
                       <h3 className="font-bold text-slate-900">{mentee.studentName}</h3>
@@ -123,7 +143,7 @@ export default function Mentees() {
                       </span>
                     </div>
                   </div>
-                  <button className="text-slate-400 hover:text-indigo-900">
+                  <button className="text-slate-400 hover:text-primary">
                     <MoreVertical size={20} />
                   </button>
                 </div>
@@ -142,7 +162,7 @@ export default function Mentees() {
                 <div className="mt-8 flex gap-3">
                   {mentee.status === 'pending' ? (
                     <>
-                      <button onClick={() => handleAccept(mentee)} className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-indigo-900 py-3 text-sm font-bold text-white transition-all hover:bg-indigo-800">
+                      <button onClick={() => handleAccept(mentee)} className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-white transition-all hover:bg-primary-dark">
                         <UserCheck size={16} /> Accept
                       </button>
                       <button onClick={() => handleDecline(mentee)} className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-red-500 hover:bg-red-50">
@@ -151,7 +171,10 @@ export default function Mentees() {
                     </>
                   ) : (
                     <>
-                      <button className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-indigo-900 py-3 text-sm font-bold text-white transition-all hover:bg-indigo-800">
+                      <button 
+                        onClick={() => handleChat(mentee)}
+                        className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-white transition-all hover:bg-primary-dark"
+                      >
                         <MessageSquare size={16} /> Chat
                       </button>
                       <button className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50">

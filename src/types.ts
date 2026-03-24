@@ -23,6 +23,7 @@ export interface User {
     interests?: string[];
     level?: string;       // e.g. "300 Level"
     bio?: string;
+    avatarUrl?: string;
     createdAt?: string;
 }
 
@@ -41,6 +42,8 @@ export interface MentorshipRequest {
     reason: string;
     date: string;       // ISO date string
     status: RequestStatus;
+    studentAvatarUrl?: string;
+    alumniAvatarUrl?: string;
 }
 
 // ─── Message ─────────────────────────────────────────────────────────────────
@@ -67,6 +70,8 @@ export interface Chat {
     lastTime: string;
     unreadByStudent: number;
     unreadByAlumni: number;
+    studentAvatarUrl?: string;
+    alumniAvatarUrl?: string;
 }
 
 // ─── Session ─────────────────────────────────────────────────────────────────

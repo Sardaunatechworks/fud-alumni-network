@@ -128,7 +128,7 @@ export default function FindMentors() {
       <button
         onClick={() => handleConnect(mentor)}
         disabled={connectingId === mentor.id}
-        className="flex-[1.5] rounded-xl bg-indigo-900 py-3 text-sm font-bold text-white transition-all hover:bg-indigo-800 hover:shadow-lg disabled:opacity-60"
+        className="flex-[1.5] rounded-xl bg-primary py-3 text-sm font-bold text-white transition-all hover:bg-primary-dark hover:shadow-lg disabled:opacity-60"
       >
         {connectingId === mentor.id ? 'Sending...' : 'Connect'}
       </button>
@@ -136,7 +136,7 @@ export default function FindMentors() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 lg:pl-64">
+    <div className="min-h-screen bg-surface lg:pl-64">
       <Sidebar role="student" />
       
       <main className="p-4 sm:p-6 lg:p-8">
@@ -155,7 +155,7 @@ export default function FindMentors() {
                 placeholder="Search by name, role, or expertise..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-2xl border-slate-200 bg-white py-4 pr-4 pl-12 text-slate-900 shadow-sm transition-all focus:border-indigo-900 focus:ring-indigo-900"
+                className="w-full rounded-2xl border-slate-200 bg-white py-4 pr-4 pl-12 text-slate-900 shadow-sm transition-all focus:border-primary focus:ring-primary"
               />
             </div>
             <div className="flex flex-wrap gap-2">
@@ -164,7 +164,7 @@ export default function FindMentors() {
                 <select
                   value={selectedDept}
                   onChange={(e) => setSelectedDept(e.target.value)}
-                  className="appearance-none rounded-2xl border-slate-200 bg-white py-4 pr-10 pl-12 text-sm font-medium text-slate-700 shadow-sm focus:border-indigo-900 focus:ring-indigo-900"
+                  className="appearance-none rounded-2xl border-slate-200 bg-white py-4 pr-10 pl-12 text-sm font-medium text-slate-700 shadow-sm focus:border-primary focus:ring-primary"
                 >
                   {departments.map(dept => (
                     <option key={dept} value={dept}>{dept}</option>
@@ -176,7 +176,7 @@ export default function FindMentors() {
                 <select
                   value={selectedSkill}
                   onChange={(e) => setSelectedSkill(e.target.value)}
-                  className="appearance-none rounded-2xl border-slate-200 bg-white py-4 pr-10 pl-12 text-sm font-medium text-slate-700 shadow-sm focus:border-indigo-900 focus:ring-indigo-900"
+                  className="appearance-none rounded-2xl border-slate-200 bg-white py-4 pr-10 pl-12 text-sm font-medium text-slate-700 shadow-sm focus:border-primary focus:ring-primary"
                 >
                   {allSkills.map(skill => (
                     <option key={skill} value={skill}>{skill}</option>
@@ -194,7 +194,7 @@ export default function FindMentors() {
                 checked={showOnlyAvailable}
                 onChange={() => setShowOnlyAvailable(!showOnlyAvailable)}
               />
-              <div className="peer h-6 w-11 rounded-full bg-slate-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-indigo-900 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300"></div>
+              <div className="peer h-6 w-11 rounded-full bg-slate-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20"></div>
               <span className="ml-3 text-sm font-medium text-slate-700">Show only available mentors</span>
             </label>
           </div>
@@ -203,7 +203,7 @@ export default function FindMentors() {
         {/* Mentors Grid */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-900 border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
             <p className="mt-4 text-sm font-bold text-slate-500">Loading mentors...</p>
           </div>
         ) : (
@@ -219,7 +219,7 @@ export default function FindMentors() {
               <div className="flex items-start gap-4">
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl ring-4 ring-slate-50">
                   <img
-                    src={`https://picsum.photos/seed/${mentor.id}/200/200`}
+                    src={mentor.avatarUrl || `https://picsum.photos/seed/${mentor.id}/200/200`}
                     alt={mentor.fullName}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                     referrerPolicy="no-referrer"
@@ -228,12 +228,12 @@ export default function FindMentors() {
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center justify-between gap-1">
                     <h3 className="line-clamp-1 text-lg font-bold text-slate-900" title={mentor.fullName}>{mentor.fullName}</h3>
-                    <div className="flex items-center gap-1 text-amber-500">
+                    <div className="flex items-center gap-1 text-accent">
                       <Star size={14} fill="currentColor" />
                       <span className="text-xs font-bold">5.0</span>
                     </div>
                   </div>
-                  <p className="line-clamp-1 text-sm font-medium text-indigo-900" title={mentor.expertise || 'Alumnus'}>
+                  <p className="line-clamp-1 text-sm font-bold text-primary" title={mentor.expertise || 'Alumnus'}>
                     {mentor.expertise || 'Alumnus'}
                   </p>
                   <p className="text-xs text-slate-500">at FUD Network</p>
@@ -265,7 +265,7 @@ export default function FindMentors() {
 
               <div className="mt-6 flex flex-wrap gap-2">
                 {getExpertiseArray(mentor).slice(0, 3).map(skill => (
-                  <span key={skill} className="rounded-full bg-indigo-50 px-3 py-1 text-[10px] font-bold text-indigo-700">
+                  <span key={skill} className="rounded-full bg-primary/10 px-3 py-1 text-[10px] font-bold text-primary">
                     {skill}
                   </span>
                 ))}
@@ -303,7 +303,7 @@ export default function FindMentors() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-8 right-8 z-[100] flex items-center gap-3 rounded-2xl bg-indigo-900 px-6 py-4 text-white shadow-2xl"
+            className="fixed bottom-8 right-8 z-[100] flex items-center gap-3 rounded-2xl bg-primary px-6 py-4 text-white shadow-2xl"
           >
             <CheckCircle size={20} />
             <p className="text-sm font-bold">{toast}</p>

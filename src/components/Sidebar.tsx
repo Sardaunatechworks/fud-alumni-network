@@ -76,12 +76,14 @@ export default function Sidebar({ role }: SidebarProps) {
 
       {/* Sidebar */}
       <aside className={`
-        fixed inset-y-0 left-0 z-40 w-64 transform bg-indigo-950 text-white transition-transform duration-300 ease-in-out lg:translate-x-0
+        fixed inset-y-0 left-0 z-40 w-64 transform bg-primary-dark text-white transition-transform duration-300 ease-in-out lg:translate-x-0
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="flex h-full flex-col px-4 py-6">
           <div className="mb-10 flex items-center gap-3 px-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-indigo-950">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-primary-dark overflow-hidden">
+              {/* Optional: Show user avatar if we have access to context here, 
+                  but Sidebar doesn't have useAuth yet. Let's just improve the icon area. */}
               <GraduationCap size={24} />
             </div>
             <span className="text-xl font-bold tracking-tight">FUD Alumni</span>
@@ -95,8 +97,8 @@ export default function Sidebar({ role }: SidebarProps) {
                 className={`
                   flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all
                   ${location.pathname === link.path || (link.path === '/dashboard/admin' && location.pathname === '/dashboard/admin/')
-                    ? 'bg-white/10 text-white shadow-inner' 
-                    : 'text-indigo-100/70 hover:bg-white/5 hover:text-white'}
+                    ? 'bg-white/10 text-white shadow-inner ring-1 ring-white/20' 
+                    : 'text-white/70 hover:bg-white/5 hover:text-white'}
                 `}
               >
                 {link.icon}

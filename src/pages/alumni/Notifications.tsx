@@ -13,7 +13,7 @@ import { useAuth } from '../../lib/authContext';
 import type { AppNotification } from '../../types';
 
 const CATEGORY_STYLES: Record<AppNotification['category'], { bg: string; icon: React.ReactNode }> = {
-  request: { bg: 'bg-indigo-50', icon: <UserPlus size={18} className="text-indigo-600" /> },
+  request: { bg: 'bg-primary/5', icon: <UserPlus size={18} className="text-primary" /> },
   message: { bg: 'bg-emerald-50', icon: <MessageSquare size={18} className="text-emerald-600" /> },
   session: { bg: 'bg-amber-50', icon: <Calendar size={18} className="text-amber-600" /> },
   system: { bg: 'bg-slate-50', icon: <Info size={18} className="text-slate-600" /> },
@@ -58,7 +58,7 @@ export default function AlumniNotifications() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-slate-50 lg:pl-64">
+    <div className="min-h-screen bg-surface lg:pl-64">
       <Sidebar role="alumni" />
 
       <main className="p-4 sm:p-6 lg:p-8">
@@ -106,10 +106,10 @@ export default function AlumniNotifications() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04 }}
                     onClick={() => !notif.read && handleMarkOne(notif.id)}
-                    className={`flex cursor-pointer items-start gap-4 rounded-2xl border p-5 transition-all hover:shadow-md
-                      ${notif.read
+                    className={`flex cursor-pointer items-start gap-4 rounded-2xl border p-5 transition-all hover:shadow-md ${
+                        notif.read
                         ? 'border-slate-100 bg-white'
-                        : 'border-indigo-100 bg-indigo-50/40 shadow-sm'
+                        : 'border-primary/20 bg-primary/5 shadow-sm'
                       }`}
                   >
                     <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${style.bg}`}>
@@ -119,7 +119,7 @@ export default function AlumniNotifications() {
                       <div className="flex items-start justify-between gap-2">
                         <p className="text-sm font-bold text-slate-900">{notif.title}</p>
                         {!notif.read && (
-                          <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-indigo-600" />
+                          <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-primary" />
                         )}
                       </div>
                       <p className="mt-0.5 text-sm text-slate-600">{notif.body}</p>

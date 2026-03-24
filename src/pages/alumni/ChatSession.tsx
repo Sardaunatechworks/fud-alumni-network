@@ -1,5 +1,6 @@
 import { useState, FormEvent, useRef, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
+import { useSearchParams } from 'react-router-dom';
 import {
   Send,
   Paperclip,
@@ -27,6 +28,8 @@ export default function AlumniChat() {
   const [message, setMessage] = useState('');
   const [isMobileListVisible, setIsMobileListVisible] = useState(true);
   const [showInfo, setShowInfo] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialChatId = searchParams.get('chat');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const reloadChats = async () => {
@@ -44,12 +47,17 @@ export default function AlumniChat() {
   useEffect(() => {
     if (!user) return;
     reloadChats().then(all => {
-      if (all && all.length > 0 && !selectedChatId) {
-        setSelectedChatId(all[0].id);
-        loadMessages(all[0].id);
+      if (all && all.length > 0) {
+        if (initialChatId && all.some(c => c.id === initialChatId)) {
+            setSelectedChatId(initialChatId);
+            loadMessages(initialChatId);
+        } else if (!selectedChatId) {
+            setSelectedChatId(all[0].id);
+            loadMessages(all[0].id);
+        }
       }
     });
-  }, [user]);
+  }, [user, initialChatId]);
 
   // Realtime: subscribe to new messages in selected chat
   useEffect(() => {
@@ -79,6 +87,7 @@ export default function AlumniChat() {
     if (!user) return;
     await markChatRead(chatId, 'alumni');
     setSelectedChatId(chatId);
+    setSearchParams({ chat: chatId });
     setIsMobileListVisible(false);
   };
 
@@ -87,13 +96,14 @@ export default function AlumniChat() {
     if (!message.trim() || !selectedChatId || !user) return;
     const text = message.trim();
     setMessage('');
-    await dbSendMessage(selectedChatId, text, 'alumni', user.id);
+    const sent = await dbSendMessage(selectedChatId, text, 'alumni', user.id);
+    if (sent) loadMessages(selectedChatId);
   };
 
   if (!user) return null;
 
   return (
-    <div className="flex h-screen bg-slate-50 lg:pl-64">
+    <div className="flex h-screen bg-surface lg:pl-64">
       <Sidebar role="alumni" />
 
       <div className="flex flex-1 overflow-hidden">
@@ -114,7 +124,7 @@ export default function AlumniChat() {
               <input
                 type="text"
                 placeholder="Search mentees..."
-                className="w-full rounded-xl border-slate-100 bg-slate-50 py-2 pr-4 pl-10 text-xs focus:border-indigo-900 focus:bg-white focus:ring-indigo-900"
+                className="w-full rounded-xl border-slate-100 bg-slate-50 py-2 pr-4 pl-10 text-xs focus:border-primary focus:bg-white focus:ring-primary"
               />
             </div>
           </div>
@@ -133,13 +143,13 @@ export default function AlumniChat() {
                 className={`
                   group mb-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 transition-all
                   ${selectedChatId === chat.id
-                    ? 'bg-indigo-900 text-white shadow-lg shadow-indigo-900/20'
+                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
                     : 'text-slate-600 hover:bg-slate-50'}
                 `}
               >
                 <div className="relative shrink-0">
                   <img
-                    src={`https://picsum.photos/seed/${chat.studentId}/100/100`}
+                    src={chat.studentAvatarUrl || `https://picsum.photos/seed/${chat.studentId}/100/100`}
                     alt={chat.studentName}
                     className={`h-11 w-11 rounded-full object-cover ring-2 ${selectedChatId === chat.id ? 'ring-white/20' : 'ring-transparent'}`}
                     referrerPolicy="no-referrer"
@@ -150,16 +160,16 @@ export default function AlumniChat() {
                     <p className={`truncate text-sm font-bold ${selectedChatId === chat.id ? 'text-white' : 'text-slate-900'}`}>
                       {chat.studentName}
                     </p>
-                    <p className={`text-[10px] ${selectedChatId === chat.id ? 'text-indigo-200' : 'text-slate-400'}`}>
+                    <p className={`text-[10px] ${selectedChatId === chat.id ? 'text-primary-light' : 'text-slate-400'}`}>
                       {chat.lastTime}
                     </p>
                   </div>
-                  <p className={`truncate text-xs ${selectedChatId === chat.id ? 'text-indigo-100' : 'text-slate-500'}`}>
+                  <p className={`truncate text-xs ${selectedChatId === chat.id ? 'text-white/80' : 'text-slate-500'}`}>
                     {chat.lastMessage || 'Start the conversation...'}
                   </p>
                 </div>
                 {chat.unreadByAlumni > 0 && selectedChatId !== chat.id && (
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
                     {chat.unreadByAlumni}
                   </span>
                 )}
@@ -182,7 +192,7 @@ export default function AlumniChat() {
                   </button>
                   <div className="relative">
                     <div className="h-10 w-10 overflow-hidden rounded-full ring-2 ring-slate-100">
-                      <img src={`https://picsum.photos/seed/${selectedChat.studentId}/100/100`} alt={selectedChat.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                      <img src={selectedChat.studentAvatarUrl || `https://picsum.photos/seed/${selectedChat.studentId}/100/100`} alt={selectedChat.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                     </div>
                   </div>
                   <div>
@@ -191,10 +201,10 @@ export default function AlumniChat() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <button className="hidden rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-indigo-900 transition-all sm:block"><Phone size={18} /></button>
-                  <button className="hidden rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-indigo-900 transition-all sm:block"><Video size={18} /></button>
-                  <button onClick={() => setShowInfo(!showInfo)} className={`rounded-xl p-2 transition-all ${showInfo ? 'bg-indigo-50 text-indigo-900' : 'text-slate-400 hover:bg-slate-50'}`}><Info size={18} /></button>
-                  <button className="rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-indigo-900 transition-all"><MoreVertical size={18} /></button>
+                  <button className="hidden rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all sm:block"><Phone size={18} /></button>
+                  <button className="hidden rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all sm:block"><Video size={18} /></button>
+                  <button onClick={() => setShowInfo(!showInfo)} className={`rounded-xl p-2 transition-all ${showInfo ? 'bg-primary/5 text-primary' : 'text-slate-400 hover:bg-slate-50'}`}><Info size={18} /></button>
+                  <button className="rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all"><MoreVertical size={18} /></button>
                 </div>
               </header>
 
@@ -217,13 +227,13 @@ export default function AlumniChat() {
                       >
                         <div className={`flex max-w-[75%] items-end gap-2 ${msg.sender === 'alumni' ? 'flex-row-reverse' : 'flex-row'}`}>
                           {msg.sender !== 'alumni' && (
-                            <img src={`https://picsum.photos/seed/${selectedChat.studentId}/100/100`} className="h-6 w-6 rounded-full object-cover" alt="" referrerPolicy="no-referrer" />
+                            <img src={selectedChat.studentAvatarUrl || `https://picsum.photos/seed/${selectedChat.studentId}/100/100`} className="h-6 w-6 rounded-full object-cover" alt="" referrerPolicy="no-referrer" />
                           )}
                           <div className="flex flex-col gap-1">
                             <div className={`
                               rounded-2xl px-4 py-2.5 text-sm shadow-sm
                               ${msg.sender === 'alumni'
-                                ? 'bg-indigo-900 text-white rounded-tr-none'
+                                ? 'bg-primary text-white rounded-tr-none'
                                 : 'bg-white text-slate-900 rounded-tl-none ring-1 ring-slate-200'}
                             `}>
                               <p className="leading-relaxed">{msg.text}</p>
@@ -231,7 +241,7 @@ export default function AlumniChat() {
                             <div className={`flex items-center gap-1 text-[9px] ${msg.sender === 'alumni' ? 'justify-end text-slate-400' : 'text-slate-400'}`}>
                               {msg.time}
                               {msg.sender === 'alumni' && (
-                                <CheckCheck size={12} className={msg.status === 'read' ? 'text-indigo-500' : 'text-slate-300'} />
+                                <CheckCheck size={12} className={msg.status === 'read' ? 'text-primary' : 'text-slate-300'} />
                               )}
                             </div>
                           </div>
@@ -252,18 +262,18 @@ export default function AlumniChat() {
                     >
                       <div className="p-6 text-center">
                         <div className="mx-auto h-20 w-20 overflow-hidden rounded-3xl ring-4 ring-slate-50">
-                          <img src={`https://picsum.photos/seed/${selectedChat.studentId}/100/100`} alt={selectedChat.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                          <img src={selectedChat.studentAvatarUrl || `https://picsum.photos/seed/${selectedChat.studentId}/100/100`} alt={selectedChat.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                         </div>
                         <h3 className="mt-4 text-base font-bold text-slate-900">{selectedChat.studentName}</h3>
                         <p className="text-xs text-slate-400">Student Mentee</p>
                       </div>
                       <div className="px-6">
                         <div className="grid grid-cols-2 gap-2">
-                          <button className="flex flex-col items-center gap-2 rounded-2xl bg-slate-50 p-3 text-slate-600 transition-all hover:bg-indigo-50 hover:text-indigo-900">
+                          <button className="flex flex-col items-center gap-2 rounded-2xl bg-slate-50 p-3 text-slate-600 transition-all hover:bg-primary/5 hover:text-primary">
                             <Calendar size={18} />
                             <span className="text-[10px] font-bold">Schedule</span>
                           </button>
-                          <button className="flex flex-col items-center gap-2 rounded-2xl bg-slate-50 p-3 text-slate-600 transition-all hover:bg-indigo-50 hover:text-indigo-900">
+                          <button className="flex flex-col items-center gap-2 rounded-2xl bg-slate-50 p-3 text-slate-600 transition-all hover:bg-primary/5 hover:text-primary">
                             <Search size={18} />
                             <span className="text-[10px] font-bold">Search</span>
                           </button>
@@ -277,8 +287,8 @@ export default function AlumniChat() {
               <footer className="bg-white p-4 border-t border-slate-100">
                 <form onSubmit={handleSendMessage} className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
-                    <button type="button" className="rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-indigo-900 transition-all"><Paperclip size={18} /></button>
-                    <button type="button" className="rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-indigo-900 transition-all"><Smile size={18} /></button>
+                    <button type="button" className="rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all"><Paperclip size={18} /></button>
+                    <button type="button" className="rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-primary transition-all"><Smile size={18} /></button>
                   </div>
                   <div className="relative flex-1">
                     <input
@@ -286,13 +296,13 @@ export default function AlumniChat() {
                       placeholder="Type a message..."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      className="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900"
+                      className="w-full rounded-2xl border-slate-100 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary"
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={!message.trim()}
-                    className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-900 text-white shadow-lg shadow-indigo-900/20 transition-all hover:bg-indigo-800 disabled:opacity-50"
+                    className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-dark disabled:opacity-50"
                   >
                     <Send size={18} />
                   </button>

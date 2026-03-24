@@ -77,7 +77,7 @@ export default function BookingModal({ isOpen, onClose, mentorName }: BookingMod
                   {/* Date Selection */}
                   <div>
                     <label className="mb-3 block text-sm font-bold text-slate-700 flex items-center gap-2">
-                      <Calendar size={16} className="text-indigo-600" />
+                      <Calendar size={16} className="text-primary" />
                       Select Date
                     </label>
                     <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
@@ -87,8 +87,8 @@ export default function BookingModal({ isOpen, onClose, mentorName }: BookingMod
                           onClick={() => setSelectedDate(d.date)}
                           className={`flex min-w-[80px] flex-col items-center rounded-2xl border py-3 transition-all ${
                             selectedDate === d.date
-                              ? 'border-indigo-600 bg-indigo-50 text-indigo-700 ring-1 ring-indigo-600'
-                              : 'border-slate-200 bg-white text-slate-600 hover:border-indigo-300'
+                              ? 'border-primary bg-primary/10 text-primary-dark ring-1 ring-primary'
+                              : 'border-slate-200 bg-white text-slate-600 hover:border-primary-light'
                           }`}
                         >
                           <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">{d.day}</span>
@@ -101,7 +101,7 @@ export default function BookingModal({ isOpen, onClose, mentorName }: BookingMod
                   {/* Time Selection */}
                   <div>
                     <label className="mb-3 block text-sm font-bold text-slate-700 flex items-center gap-2">
-                      <Clock size={16} className="text-indigo-600" />
+                      <Clock size={16} className="text-primary" />
                       Select Time Slot
                     </label>
                     <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
@@ -111,8 +111,8 @@ export default function BookingModal({ isOpen, onClose, mentorName }: BookingMod
                           onClick={() => setSelectedTime(t)}
                           className={`rounded-xl border py-2 text-xs font-bold transition-all ${
                             selectedTime === t
-                              ? 'border-indigo-600 bg-indigo-50 text-indigo-700 ring-1 ring-indigo-600'
-                              : 'border-slate-200 bg-white text-slate-600 hover:border-indigo-300'
+                              ? 'border-primary bg-primary/10 text-primary-dark ring-1 ring-primary'
+                              : 'border-slate-200 bg-white text-slate-600 hover:border-primary-light'
                           }`}
                         >
                           {t}
@@ -134,7 +134,7 @@ export default function BookingModal({ isOpen, onClose, mentorName }: BookingMod
                   <button
                     disabled={!selectedDate || !selectedTime}
                     onClick={handleBook}
-                    className="w-full rounded-2xl bg-indigo-900 py-4 text-sm font-bold text-white transition-all hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white transition-all hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Confirm Booking
                   </button>
@@ -142,7 +142,7 @@ export default function BookingModal({ isOpen, onClose, mentorName }: BookingMod
               </>
             ) : (
               <div className="p-12 text-center">
-                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-50 text-primary">
                   <CheckCircle2 size={40} />
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900">Booking Requested!</h3>
@@ -151,7 +151,7 @@ export default function BookingModal({ isOpen, onClose, mentorName }: BookingMod
                 </p>
                 <button
                   onClick={resetAndClose}
-                  className="mt-8 w-full rounded-2xl bg-indigo-900 py-4 text-sm font-bold text-white transition-all hover:bg-indigo-800"
+                  className="mt-8 w-full rounded-2xl bg-primary py-4 text-sm font-bold text-white transition-all hover:bg-primary-dark"
                 >
                   Back to Dashboard
                 </button>

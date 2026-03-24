@@ -77,7 +77,7 @@ export default function AlumniDashboard() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-slate-50 lg:pl-64">
+    <div className="min-h-screen bg-surface lg:pl-64">
       <Sidebar role="alumni" />
       
       <main className="p-4 sm:p-6 lg:p-8">
@@ -90,8 +90,8 @@ export default function AlumniDashboard() {
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-slate-200">
               <TrendingUp size={20} className="text-emerald-600" />
             </div>
-            <div className="h-10 w-10 overflow-hidden rounded-full ring-2 ring-indigo-900">
-              <img src="https://picsum.photos/seed/alumni/100/100" alt="Profile" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+            <div className="h-10 w-10 overflow-hidden rounded-full ring-2 ring-primary">
+              <img src={user.avatarUrl || `https://picsum.photos/seed/${user.id}/100/100`} alt="Profile" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
             </div>
           </div>
         </header>
@@ -99,7 +99,7 @@ export default function AlumniDashboard() {
         {/* Statistics Section */}
         <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { label: 'Active Mentees', value: acceptedMentees.length, icon: <Users size={20} />, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+            { label: 'Active Mentees', value: acceptedMentees.length, icon: <Users size={20} />, color: 'text-primary', bg: 'bg-primary/10' },
             { label: 'Pending Requests', value: pendingRequests.length, icon: <Clock size={20} />, color: 'text-amber-600', bg: 'bg-amber-50' },
             { label: 'Total Requests', value: totalRequests, icon: <Calendar size={20} />, color: 'text-emerald-600', bg: 'bg-emerald-50' },
             { label: 'Profile Score', value: `${profileCompletion}%`, icon: <Star size={20} />, color: 'text-purple-600', bg: 'bg-purple-50' },
@@ -127,7 +127,7 @@ export default function AlumniDashboard() {
             <section className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
               <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-lg font-bold text-slate-900">Active Mentees</h2>
-                <Link to="/dashboard/alumni/mentees" className="text-sm font-bold text-indigo-900 hover:underline">Manage All</Link>
+                <Link to="/dashboard/alumni/mentees" className="text-sm font-bold text-primary hover:underline">Manage All</Link>
               </div>
               {acceptedMentees.length === 0 ? (
                 <div className="flex flex-col items-center py-10 text-center">
@@ -141,7 +141,7 @@ export default function AlumniDashboard() {
                     <div key={i} className="flex items-center justify-between rounded-2xl border border-slate-50 p-4 transition-all hover:bg-slate-50">
                       <div className="flex items-center gap-4">
                         <div className="h-12 w-12 overflow-hidden rounded-xl bg-slate-100">
-                          <img src={`https://picsum.photos/seed/${mentee.studentId}/100/100`} alt={mentee.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                          <img src={mentee.studentAvatarUrl || `https://picsum.photos/seed/${mentee.studentId}/100/100`} alt={mentee.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                         </div>
                         <div>
                           <p className="font-bold text-slate-900">{mentee.studentName}</p>
@@ -150,8 +150,8 @@ export default function AlumniDashboard() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Link
-                          to="/dashboard/alumni/chat"
-                          className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-900 hover:bg-indigo-900 hover:text-white transition-all"
+                          to={`/dashboard/alumni/chat?chat=${mentee.studentId}_${user?.id}`}
+                          className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all"
                         >
                           <MessageSquare size={18} />
                         </Link>
@@ -173,11 +173,11 @@ export default function AlumniDashboard() {
                 </div>
                 <div className="space-y-4">
                   {pendingRequests.map((req, i) => (
-                    <div key={i} className="rounded-2xl border border-indigo-100 bg-indigo-50/30 p-5">
+                    <div key={i} className="rounded-2xl border border-primary/20 bg-primary/5 p-5">
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
                           <div className="h-12 w-12 overflow-hidden rounded-xl bg-slate-200">
-                            <img src={`https://picsum.photos/seed/${req.studentId}/100/100`} alt={req.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                             <img src={req.studentAvatarUrl || `https://picsum.photos/seed/${req.studentId}/100/100`} alt={req.studentName} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                           </div>
                           <div>
                             <p className="text-sm font-bold text-slate-900">{req.studentName}</p>
@@ -215,25 +215,25 @@ export default function AlumniDashboard() {
 
           {/* Sidebar Area */}
           <div className="space-y-6">
-            <section className="rounded-3xl bg-indigo-900 p-6 text-white shadow-lg">
+            <section className="rounded-3xl bg-primary p-6 text-white shadow-lg">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
-                  <Award size={24} className="text-amber-400" />
+                  <Award size={24} className="text-accent" />
                 </div>
                 <h2 className="text-lg font-bold">Your Profile</h2>
               </div>
               <div className="mt-4 flex items-center gap-3">
                 <div className="h-12 w-12 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20">
-                  <img src="https://picsum.photos/seed/alumni/100/100" alt="Profile" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={user.avatarUrl || `https://picsum.photos/seed/${user.id}/100/100`} alt="Profile" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                 </div>
                 <div>
                   <p className="text-sm font-bold">{user.fullName}</p>
-                  <p className="text-[10px] text-indigo-300">{user.department}</p>
+                  <p className="text-[10px] text-primary-light">{user.department}</p>
                 </div>
               </div>
               {user.expertise && (
                 <div className="mt-6 space-y-3">
-                  <p className="text-xs font-medium text-indigo-200 uppercase tracking-wider">Expertise</p>
+                  <p className="text-xs font-medium text-white/70 uppercase tracking-wider">Expertise</p>
                   <div className="flex flex-wrap gap-2">
                     {(user.expertise.includes(',') ? user.expertise.split(',') : [user.expertise]).map((exp, i) => (
                       <span key={i} className="rounded-full bg-white/10 px-2 py-1 text-[10px] font-medium text-white ring-1 ring-white/20">
@@ -245,7 +245,7 @@ export default function AlumniDashboard() {
               )}
               <Link
                 to="/dashboard/alumni/settings"
-                className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-white py-3 text-sm font-bold text-indigo-900 transition-all hover:bg-indigo-50"
+                className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-white py-3 text-sm font-bold text-primary transition-all hover:bg-primary/5"
               >
                 Edit Profile <ArrowRight size={16} />
               </Link>

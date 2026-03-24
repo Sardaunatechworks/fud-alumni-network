@@ -45,11 +45,11 @@ export default function AdminSignup() {
         className="w-full max-w-md space-y-8"
       >
         <div className="text-center">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-indigo-900">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-primary">
             <ArrowLeft size={16} /> Back to Home
           </Link>
           <div className="mt-6 flex justify-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-900 text-white shadow-lg">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-white shadow-lg">
               <Shield size={28} />
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function AdminSignup() {
                   required
                   value={formData.fullName}
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                  className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-indigo-900 focus:bg-white focus:ring-indigo-900 sm:text-sm"
+                  className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-primary focus:bg-white focus:ring-primary sm:text-sm"
                   placeholder="System Administrator"
                 />
               </div>
@@ -93,7 +93,7 @@ export default function AdminSignup() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-indigo-900 focus:bg-white focus:ring-indigo-900 sm:text-sm"
+                  className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-primary focus:bg-white focus:ring-primary sm:text-sm"
                   placeholder="admin@example.com"
                 />
               </div>
@@ -106,13 +106,13 @@ export default function AdminSignup() {
                     required
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-indigo-900 focus:bg-white focus:ring-indigo-900 sm:text-sm"
+                    className="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-primary focus:bg-white focus:ring-primary sm:text-sm"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-indigo-900"
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-primary"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
@@ -123,7 +123,7 @@ export default function AdminSignup() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-900 px-4 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-indigo-800 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-900 focus:ring-offset-2 disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-primary-dark hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-60"
             >
               {loading && <Loader2 size={16} className="animate-spin" />}
               {loading ? 'Creating Account…' : 'Create Admin Account'}

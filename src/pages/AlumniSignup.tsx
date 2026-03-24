@@ -1,4 +1,4 @@
-﻿import { useState, FormEvent } from 'react';
+import { useState, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Briefcase, Eye, EyeOff, ArrowLeft, AlertCircle, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -64,18 +64,18 @@ export default function AlumniSignup() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-surface px-4 py-12 sm:px-6 lg:px-8">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="mx-auto w-full max-w-3xl"
       >
         <div className="text-center">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-indigo-900">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-primary">
             <ArrowLeft size={16} /> Back to Home
           </Link>
           <div className="mt-6 flex justify-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-900 text-white shadow-lg">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-primary shadow-lg">
               <Briefcase size={28} />
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function AlumniSignup() {
                     required 
                     value={formData.fullName}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900" 
+                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all" 
                     placeholder="Dr. Jane Smith" 
                   />
                 </div>
@@ -132,7 +132,7 @@ export default function AlumniSignup() {
                     required 
                     value={formData.email}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900" 
+                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all" 
                     placeholder="jane.smith@example.com" 
                   />
                 </div>
@@ -144,7 +144,7 @@ export default function AlumniSignup() {
                     required 
                     value={formData.state}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900" 
+                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all" 
                     placeholder="Jigawa" 
                   />
                 </div>
@@ -156,7 +156,7 @@ export default function AlumniSignup() {
                     required 
                     value={formData.graduationYear}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900" 
+                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all" 
                     placeholder="2015" 
                   />
                 </div>
@@ -172,7 +172,7 @@ export default function AlumniSignup() {
                     name="faculty"
                     value={formData.faculty}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900"
+                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all"
                   >
                                         <option>Science</option>
                     <option>Computing</option>
@@ -191,7 +191,7 @@ export default function AlumniSignup() {
                     required 
                     value={formData.department}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900" 
+                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all" 
                     placeholder="Biological Sciences" 
                   />
                 </div>
@@ -203,7 +203,7 @@ export default function AlumniSignup() {
                     required 
                     value={formData.expertise}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900" 
+                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all" 
                     placeholder="Software Engineering" 
                   />
                 </div>
@@ -215,7 +215,7 @@ export default function AlumniSignup() {
                     required 
                     value={formData.skills}
                     onChange={handleChange}
-                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900" 
+                    className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all" 
                     placeholder="Python, Leadership, Research" 
                   />
                 </div>
@@ -230,13 +230,13 @@ export default function AlumniSignup() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900"
-                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all"
+                placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-9 text-slate-400 hover:text-indigo-900"
+                className="absolute right-3 top-9 text-slate-400 hover:text-primary transition-colors"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -250,8 +250,8 @@ export default function AlumniSignup() {
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-indigo-900 focus:bg-white focus:ring-indigo-900"
-                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                className="mt-1 block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-primary focus:bg-white focus:ring-primary shadow-sm transition-all"
+                placeholder="••••••••"
               />
             </div>
 
@@ -259,10 +259,10 @@ export default function AlumniSignup() {
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-900 px-4 py-4 text-base font-bold text-white shadow-lg transition-all hover:bg-indigo-800 hover:shadow-xl disabled:opacity-60"
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-base font-bold text-white shadow-lg transition-all hover:bg-primary-dark hover:shadow-xl disabled:opacity-60 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               >
                 {loading && <Loader2 size={18} className="animate-spin" />}
-                {loading ? 'Submittingâ€¦' : 'Submit for Approval'}
+                {loading ? 'Submitting…' : 'Submit for Approval'}
               </button>
               <p className="mt-4 text-center text-xs text-slate-500">
                 By submitting, you agree to our terms and conditions for alumni mentors.
@@ -272,7 +272,7 @@ export default function AlumniSignup() {
 
           <div className="mt-8 text-center text-sm">
             <span className="text-slate-600">Already have an account?</span>{' '}
-            <Link to="/login" className="font-bold text-indigo-900 hover:text-indigo-800">
+            <Link to="/login" className="font-bold text-primary hover:text-primary-dark transition-colors">
               Login here
             </Link>
           </div>

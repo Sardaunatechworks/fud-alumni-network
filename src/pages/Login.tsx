@@ -56,18 +56,18 @@ export default function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center bg-surface px-4 py-12 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md space-y-8"
       >
         <div className="text-center">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-indigo-900">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-primary">
             <ArrowLeft size={16} /> Back to Home
           </Link>
           <div className="mt-6 flex justify-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-900 text-white shadow-lg">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-primary shadow-lg">
               <GraduationCap size={28} />
             </div>
           </div>
@@ -103,7 +103,7 @@ export default function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-indigo-900 focus:bg-white focus:ring-indigo-900 sm:text-sm"
+                  className="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-primary focus:bg-white focus:ring-primary sm:text-sm"
                   placeholder="name@example.com"
                 />
               </div>
@@ -121,13 +121,13 @@ export default function Login() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-indigo-900 focus:bg-white focus:ring-indigo-900 sm:text-sm"
+                  className="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm transition-all focus:border-primary focus:bg-white focus:ring-primary sm:text-sm"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-indigo-900"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-primary"
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -140,14 +140,14 @@ export default function Login() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 rounded border-slate-300 text-indigo-900 focus:ring-indigo-900"
+                  className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-600">
                   Remember me
                 </label>
               </div>
               <div className="text-sm">
-                <a href="#" className="font-medium text-indigo-900 hover:text-indigo-800">
+                <a href="#" className="font-medium text-primary hover:text-primary-dark">
                   Forgot password?
                 </a>
               </div>
@@ -156,7 +156,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-900 px-4 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-indigo-800 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-900 focus:ring-offset-2 disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-primary-dark hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-60"
             >
               {loading && <Loader2 size={16} className="animate-spin" />}
               {loading ? 'Signing in…' : 'Login'}
@@ -165,7 +165,7 @@ export default function Login() {
 
           <div className="mt-6 text-center text-sm">
             <span className="text-slate-600">Don't have an account?</span>{' '}
-            <Link to="/signup/student" className="font-bold text-indigo-900 hover:text-indigo-800">
+            <Link to="/signup/student" className="font-bold text-primary hover:text-primary-dark">
               Sign up
             </Link>
           </div>
