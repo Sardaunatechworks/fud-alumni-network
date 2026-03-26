@@ -108,8 +108,8 @@ export default function Notifications() {
                 <Bell size={14} />
                 Activity Center
               </div>
-              <h1 className="text-3xl font-extrabold text-slate-900 sm:text-4xl">Notifications</h1>
-              <p className="mt-2 text-slate-500">Stay updated with your mentorship activities and network updates.</p>
+              <h1 className="text-2xl font-extrabold text-slate-900 sm:text-4xl">Notifications</h1>
+              <p className="mt-2 text-sm text-slate-500">Stay updated with your mentorship activities and network updates.</p>
             </div>
             <div className="flex items-center gap-3">
               {notifications.some(n => !n.read) && (
@@ -175,7 +175,7 @@ export default function Notifications() {
                         exit={{ opacity: 0, scale: 0.95 }}
                         onClick={() => !notif.read && handleMarkOne(notif.id)}
                         className={`
-                          cursor-pointer group relative flex items-start gap-5 rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-slate-200 transition-all hover:shadow-xl hover:shadow-primary/5 hover:ring-primary/20
+                          cursor-pointer group relative flex flex-col sm:flex-row items-start gap-4 sm:gap-5 rounded-[2rem] bg-white p-5 sm:p-6 shadow-sm ring-1 ring-slate-200 transition-all hover:shadow-xl hover:shadow-primary/5 hover:ring-primary/20
                           ${!notif.read ? 'bg-gradient-to-r from-white to-primary/5' : ''}
                         `}
                       >

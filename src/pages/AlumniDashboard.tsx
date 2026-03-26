@@ -83,7 +83,7 @@ export default function AlumniDashboard() {
       <main className="p-4 sm:p-6 lg:p-8">
         <header className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">Welcome back, {user.fullName}! 🎓</h1>
+            <h1 className="text-xl font-extrabold text-slate-900 sm:text-3xl">Welcome back, {user.fullName}! 🎓</h1>
             <p className="mt-1 text-slate-500">Your mentorship is shaping the future of FUD students.</p>
           </div>
           <div className="flex items-center gap-3">

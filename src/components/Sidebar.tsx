@@ -69,15 +69,16 @@ export default function Sidebar({ role }: SidebarProps) {
       {/* Mobile Menu Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 rounded-lg bg-white p-2 shadow-md lg:hidden"
+        className="fixed top-4 left-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl bg-white/90 text-primary-dark shadow-lg ring-1 ring-slate-200 backdrop-blur-md transition-all active:scale-95 lg:hidden"
+        aria-label="Toggle Menu"
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
       {/* Sidebar */}
       <aside className={`
-        fixed inset-y-0 left-0 z-40 w-64 transform bg-primary-dark text-white transition-transform duration-300 ease-in-out lg:translate-x-0
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        fixed inset-y-0 left-0 z-40 w-72 transform bg-primary-dark text-white transition-all duration-300 ease-in-out lg:w-64 lg:translate-x-0
+        ${isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'}
       `}>
         <div className="flex h-full flex-col px-4 py-6">
           <div className="mb-10 flex items-center gap-3 px-2">

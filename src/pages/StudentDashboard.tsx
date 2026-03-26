@@ -72,7 +72,7 @@ export default function StudentDashboard() {
       <main className="p-4 sm:p-6 lg:p-8">
         <header className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">Welcome, {user.fullName}! 👋</h1>
+            <h1 className="text-xl font-extrabold text-slate-900 sm:text-3xl">Welcome, {user.fullName}! 👋</h1>
             <p className="mt-1 text-slate-500">Here's what's happening with your mentorship journey.</p>
           </div>
           <div className="flex items-center gap-3">
@@ -86,7 +86,7 @@ export default function StudentDashboard() {
         </header>
 
         {/* Stats Row */}
-        <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { label: 'Connected Mentors', value: acceptedMentors.length, icon: <UserCheck size={20} />, color: 'text-primary', bg: 'bg-primary/10' },
             { label: 'Pending Requests', value: pendingRequests.length, icon: <Clock size={20} />, color: 'text-amber-600', bg: 'bg-amber-50' },

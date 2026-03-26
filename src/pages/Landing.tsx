@@ -29,7 +29,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 pb-20 lg:pt-48 lg:pb-32">
+      <section className="relative overflow-hidden pt-24 pb-12 lg:pt-48 lg:pb-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="lg:grid lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-7">
@@ -41,7 +41,7 @@ export default function Landing() {
                 <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary-dark ring-1 ring-inset ring-primary/20">
                   Empowering the Next Generation
                 </span>
-                <h1 className="mt-6 text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl lg:text-7xl">
+                <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl lg:text-7xl">
                   Connect with FUD <span className="text-primary">Excellence.</span>
                 </h1>
                 <p className="mt-6 text-lg leading-8 text-slate-600 max-w-2xl">
@@ -113,7 +113,7 @@ export default function Landing() {
       </section>
 
       {/* Features */}
-      <section className="bg-primary/5 py-24">
+      <section className="bg-primary/5 py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Built for Success</h2>

@@ -64,8 +64,8 @@ export default function AlumniNotifications() {
       <main className="p-4 sm:p-6 lg:p-8">
         <header className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">Notifications</h1>
-            <p className="mt-1 text-slate-500">
+            <h1 className="text-xl font-extrabold text-slate-900 sm:text-3xl">Notifications</h1>
+            <p className="mt-1 text-sm text-slate-500">
               {unreadCount > 0
                 ? `You have ${unreadCount} unread notification${unreadCount > 1 ? 's' : ''}.`
                 : 'You are all caught up!'}

@@ -88,7 +88,7 @@ export default function StudentSignup() {
               <GraduationCap size={28} />
             </div>
           </div>
-          <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-slate-900">Student Registration</h2>
+          <h2 className="mt-6 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">Student Registration</h2>
           <p className="mt-2 text-sm text-slate-600">
             Join the network and start your journey with expert guidance
           </p>
