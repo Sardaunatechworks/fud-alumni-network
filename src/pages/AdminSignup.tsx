@@ -18,6 +18,14 @@ export default function AdminSignup() {
   const handleSignup = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Strict Validation
+    const nameRegex = /^[A-Za-z\s.'-]+$/;
+    if (!nameRegex.test(formData.fullName)) {
+      setError('Full Name should only contain letters and basic punctuation.');
+      return;
+    }
+
     setLoading(true);
 
     const { error: signUpError } = await signUp(formData.email, formData.password, {

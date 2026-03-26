@@ -133,6 +133,19 @@ export default function AdminDashboard() {
   const handleUpdateUser = async (e: FormEvent) => {
     e.preventDefault();
     if (!editingUser) return;
+
+    const nameRegex = /^[A-Za-z\s.'-]+$/;
+    const academicRegex = /^[A-Za-z\s&'(),.-]+$/;
+
+    if (!nameRegex.test(editingUser.fullName)) {
+      showNotif('Full Name should only contain letters.', 'error');
+      return;
+    }
+    if (editingUser.department && !academicRegex.test(editingUser.department)) {
+      showNotif('Department should only contain letters.', 'error');
+      return;
+    }
+
     await updateProfile(editingUser.id, {
       fullName: editingUser.fullName,
       department: editingUser.department,
@@ -153,6 +166,24 @@ export default function AdminDashboard() {
   // Add alumni manually via Supabase Auth signUp (status = active, bypasses pending)
   const handleAddAlumni = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Strict Validation
+    const nameRegex = /^[A-Za-z\s.'-]+$/;
+    const academicRegex = /^[A-Za-z\s&'(),.-]+$/;
+
+    if (!nameRegex.test(newAlumni.fullName)) {
+      showNotif('Full Name should only contain letters.', 'error');
+      return;
+    }
+    if (!academicRegex.test(newAlumni.department)) {
+      showNotif('Department should only contain letters.', 'error');
+      return;
+    }
+    if (!academicRegex.test(newAlumni.expertise)) {
+      showNotif('Expertise should only contain letters.', 'error');
+      return;
+    }
+
     setAddLoading(true);
     const { error } = await signUp(newAlumni.email, newAlumni.password, {
       full_name: newAlumni.fullName,

@@ -26,6 +26,29 @@ export default function AlumniSignup() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Strict Validation
+    const nameRegex = /^[A-Za-z\s.'-]+$/;
+    const academicRegex = /^[A-Za-z\s&'(),.-]+$/;
+    const stateRegex = /^[A-Za-z\s'-]+$/;
+
+    if (!nameRegex.test(formData.fullName)) {
+      setError('Full Name should only contain letters and basic punctuation.');
+      return;
+    }
+    if (!stateRegex.test(formData.state)) {
+      setError('State should only contain letters.');
+      return;
+    }
+    if (!academicRegex.test(formData.department)) {
+      setError('Department should only contain letters and academic punctuation.');
+      return;
+    }
+    if (!academicRegex.test(formData.expertise)) {
+      setError('Expertise should only contain letters and academic punctuation.');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;

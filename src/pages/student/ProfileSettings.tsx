@@ -43,6 +43,23 @@ export default function ProfileSettings() {
 
   const handleSave = async () => {
     if (!user) return;
+
+    const nameRegex = /^[A-Za-z\s.'-]+$/;
+    const academicRegex = /^[A-Za-z\s&'(),.-]+$/;
+
+    if (!nameRegex.test(formData.fullName)) {
+      alert('Full Name should only contain letters.');
+      return;
+    }
+    if (formData.faculty && !academicRegex.test(formData.faculty)) {
+      alert('Faculty should only contain letters.');
+      return;
+    }
+    if (formData.department && !academicRegex.test(formData.department)) {
+      alert('Department should only contain letters.');
+      return;
+    }
+
     setIsSaving(true);
     await updateProfile(user.id, {
       fullName: formData.fullName,

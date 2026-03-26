@@ -25,6 +25,23 @@ export default function AlumniSettings() {
 
   const handleSave = async () => {
     if (!user) return;
+
+    const nameRegex = /^[A-Za-z\s.'-]+$/;
+    const academicRegex = /^[A-Za-z\s&'(),.-]+$/;
+
+    if (!nameRegex.test(formData.fullName)) {
+      alert('Full Name should only contain letters.');
+      return;
+    }
+    if (formData.graduationYear && !/^\d{4}$/.test(String(formData.graduationYear))) {
+        alert('Graduation Year should be a 4-digit number.');
+        return;
+    }
+    if (formData.expertise && !academicRegex.test(formData.expertise)) {
+      alert('Expertise should only contain letters.');
+      return;
+    }
+
     setIsSaving(true);
     await updateProfile(user.id, {
       fullName: formData.fullName,
