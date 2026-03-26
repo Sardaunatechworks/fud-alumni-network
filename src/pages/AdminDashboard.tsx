@@ -252,10 +252,10 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-surface lg:pl-64">
       <Sidebar role="admin" />
 
-      <main className="p-4 sm:p-6 lg:p-8">
+      <main className="p-4 pt-20 sm:p-6 lg:p-8 lg:pt-8">
         <header className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">Admin Control Center</h1>
+            <h1 className="text-xl font-extrabold text-slate-900 sm:text-3xl">Admin Control Center</h1>
             <p className="mt-1 text-slate-500">System-wide management and moderation.</p>
           </div>
           <div className="flex items-center gap-3">

@@ -100,7 +100,7 @@ export default function Notifications() {
     <div className="min-h-screen bg-surface lg:pl-64">
       <Sidebar role="student" />
       
-      <main className="mx-auto max-w-5xl p-4 sm:p-6 lg:p-10">
+      <main className="mx-auto max-w-5xl p-4 pt-20 sm:p-6 lg:p-10 lg:pt-10">
         <header className="mb-10">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div>
